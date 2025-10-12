@@ -1,59 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// Import components and pages
 import NavigationBar from './components/Navbar';
 import TaskListView from './pages/TaskListView';
 import AddTaskView from './pages/AddTaskView';
+import { getTasksFromDB, addTaskToDB, deleteTaskFromDB } from './api';
 
 function App() {
-  // Global state for tasks
   const [tasks, setTasks] = useState([]);
 
-  // Add task function
-  const addTask = (newTask) => {
-    const task = {
-      id: Date.now().toString(),
-      title: newTask.title,
-      description: newTask.description,
-      priority: newTask.priority,
-      createdAt: new Date().toLocaleDateString()
-    };
-    setTasks([...tasks, task]);
+  // Load tasks from database on startup
+  useEffect(() => {
+    loadTasksFromDatabase();
+  }, []);
+
+  const loadTasksFromDatabase = async () => {
+    const tasksFromDB = await getTasksFromDB();
+    setTasks(tasksFromDB);
   };
 
-  // Delete task function
-  const deleteTask = (taskId) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
+  // Add task function - saves to database
+  const handleAddTask = async (newTask) => {
+    const success = await addTaskToDB(newTask);
+    if (success) {
+      // Reload tasks from database to get the latest data
+      await loadTasksFromDatabase();
+      return true;
+    }
+    return false;
+  };
+
+  // Delete task function - removes from database
+  const handleDeleteTask = async (taskId) => {
+    const success = await deleteTaskFromDB(taskId);
+    if (success) {
+      // Reload tasks from database to get the latest data
+      await loadTasksFromDatabase();
+      return true;
+    }
+    return false;
   };
 
   return (
     <Router>
       <div className="App">
-        {/* Navigation Bar Component */}
         <NavigationBar />
-
-        {/* Main Content */}
         <Container>
           <Routes>
             <Route 
               path="/" 
-              element={
-                <TaskListView 
-                  tasks={tasks} 
-                  deleteTask={deleteTask} 
-                />
-              } 
+              element={<TaskListView tasks={tasks} deleteTask={handleDeleteTask} />} 
             />
             <Route 
               path="/add-task" 
-              element={
-                <AddTaskView 
-                  addTask={addTask} 
-                />
-              } 
+              element={<AddTaskView addTask={handleAddTask} />} 
             />
           </Routes>
         </Container>

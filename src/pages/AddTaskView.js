@@ -28,7 +28,7 @@ const AddTaskView = ({ addTask }) => {
     }
 
     addTask(formData);
-    // Reset form
+
     setFormData({
       title: '',
       description: '',
@@ -36,7 +36,7 @@ const AddTaskView = ({ addTask }) => {
     });
     setShowAlert(false);
     
-    // Navigate back to home
+
     navigate('/');
   };
 

@@ -1,59 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// Import components and pages
 import NavigationBar from './components/Navbar';
 import TaskListView from './pages/TaskListView';
 import AddTaskView from './pages/AddTaskView';
 
 function App() {
-  // Global state for tasks
   const [tasks, setTasks] = useState([]);
 
+  // Load tasks from localStorage when app starts
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    setTasks(savedTasks);
+  }, []);
+
+  // Save tasks to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
   // Add task function
-  const addTask = (newTask) => {
-    const task = {
-      id: Date.now().toString(),
-      title: newTask.title,
-      description: newTask.description,
-      priority: newTask.priority,
-      createdAt: new Date().toLocaleDateString()
-    };
-    setTasks([...tasks, task]);
+  const handleAddTask = (newTask) => {
+    const taskWithId = { ...newTask, id: Date.now() }; // Add a unique id
+    setTasks([...tasks, taskWithId]);
+    return true;
   };
 
   // Delete task function
-  const deleteTask = (taskId) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
+  const handleDeleteTask = (taskId) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(updatedTasks);
+    return true;
   };
 
   return (
     <Router>
       <div className="App">
-        {/* Navigation Bar Component */}
         <NavigationBar />
-
-        {/* Main Content */}
         <Container>
           <Routes>
             <Route 
               path="/" 
-              element={
-                <TaskListView 
-                  tasks={tasks} 
-                  deleteTask={deleteTask} 
-                />
-              } 
+              element={<TaskListView tasks={tasks} deleteTask={handleDeleteTask} />} 
             />
             <Route 
               path="/add-task" 
-              element={
-                <AddTaskView 
-                  addTask={addTask} 
-                />
-              } 
+              element={<AddTaskView addTask={handleAddTask} />} 
             />
           </Routes>
         </Container>

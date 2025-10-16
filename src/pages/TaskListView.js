@@ -1,4 +1,4 @@
-//Yasmien Aira Regidor
+//Yasmien 
 
 import React from 'react';
 import { Button, Row, Col } from 'react-bootstrap';

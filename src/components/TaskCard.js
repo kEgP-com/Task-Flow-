@@ -35,7 +35,7 @@ const TaskCard = ({ task, onDelete }) => {
           size="sm"
           onClick={() => onDelete(task.id)}
         >
-          Delete
+          Done
         </Button>
       </Card.Footer>
     </Card>

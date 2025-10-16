@@ -7,7 +7,7 @@ const NavigationBar = () => {
     <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
       <Container>
         <Navbar.Brand as={Link} to="/">
-           TaskFlow
+           Task-Flow
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

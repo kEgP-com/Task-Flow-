@@ -23,7 +23,7 @@ function App() {
 
   // Add task function
   const handleAddTask = (newTask) => {
-    const taskWithId = { ...newTask, id: Date.now() }; // Add a unique id
+    const taskWithId = { ...newTask, id: Date.now() }; 
     setTasks([...tasks, taskWithId]);
     return true;
   };

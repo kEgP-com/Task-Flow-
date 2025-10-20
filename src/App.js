@@ -11,25 +11,24 @@ import AddTaskView from './pages/AddTaskView';
 function App() {
   const [tasks, setTasks] = useState([]);
 
-  // Load tasks from localStorage when app starts
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
     setTasks(savedTasks);
   }, []);
 
-  // Save tasks to localStorage whenever they change
+
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
 
-  // Add task function
+
   const handleAddTask = (newTask) => {
-    const taskWithId = { ...newTask, id: Date.now() }; // Add a unique id
+    const taskWithId = { ...newTask, id: Date.now() }; 
     setTasks([...tasks, taskWithId]);
     return true;
   };
 
-  // Delete task function
+
   const handleDeleteTask = (taskId) => {
     const updatedTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(updatedTasks);

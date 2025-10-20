@@ -7,7 +7,7 @@ import NavigationBar from './components/Navbar';
 import TaskListView from './pages/TaskListView';
 import AddTaskView from './pages/AddTaskView';
 
-// Ramos
+// Ramos, Rachel 
 function App() {
   const [tasks, setTasks] = useState([]);
 
